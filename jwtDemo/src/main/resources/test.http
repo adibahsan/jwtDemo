@@ -1,0 +1,9 @@
+GET http://localhost:8181/public
+Content-Type: application/json
+
+###
+
+GET http://localhost:8181/private
+Content-Type: application/json
+
+###

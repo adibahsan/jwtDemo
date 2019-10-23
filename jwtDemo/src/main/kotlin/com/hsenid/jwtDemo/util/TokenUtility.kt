@@ -13,6 +13,7 @@ import kotlin.collections.HashMap
 @Component
 class TokenUtility {
     val tokenSecret : String ="hsenidMobile"
+    val algorithm = SignatureAlgorithm.HS512
 
     fun generateToken(userDetails: UserDetails): String? {
     val tokenClaims = HashMap<String,Any>()
@@ -24,10 +25,34 @@ class TokenUtility {
         return Jwts.builder()
                 .setSubject(userDetails.username)
                 .setClaims(tokenClaims)
-                .signWith(SignatureAlgorithm.HS512,tokenSecret )
+                .signWith(algorithm,tokenSecret )
                 .compact()
 
     }
 
+    fun getClaimsFromToken (token:String):Claims{
+        return Jwts.parser()
+                .setSigningKey(this.tokenSecret)
+                .parseClaimsJws(token)
+                .body?: throw RuntimeException("Failed to Retrieve Claims from the Token")
+    }
+
+
+    fun getUsernameFromToken(token: String) : String {
+       return getClaimsFromToken(token).subject ?: throw RuntimeException("Username Not Found")
+    }
+
+    fun getExpirationDateFromToken(token: String): Date? {
+        return getClaimsFromToken(token).expiration
+    }
+
+    fun getDetailsFromToken(token:String) :UserDetails {
+        return  StudentDetailsDTO(
+                getUsernameFromToken(token),
+                "",
+                getClaimsFromToken(token)["authorities"] as String
+        )
+
+    }
 
 }

@@ -11,12 +11,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @SpringBootApplication
 class JwtDemoApplication{
 	@Bean
-	fun init(appUserRepository: StudentRepository) = CommandLineRunner {
+	fun initializer(appUserRepository: StudentRepository) = CommandLineRunner {
 		appUserRepository.save(Student(
 				id = null,
 				name = "adib",
 				password = BCryptPasswordEncoder().encode("1212"),
 				authorities = "ROLE_ADMIN, ROLE_EMPLOYEE, ROLE_MANAGER"))
+
+		appUserRepository.save(Student(
+				id = null,
+				name = "sakib",
+				password = BCryptPasswordEncoder().encode("1234"),
+				authorities = "ROLE_ADMIN"))
 	}
 }
 

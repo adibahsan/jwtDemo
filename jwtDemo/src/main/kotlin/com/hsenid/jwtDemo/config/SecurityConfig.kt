@@ -44,10 +44,5 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .passwordEncoder(BCryptPasswordEncoder())
     }
 
-//    @Bean
-//    fun authenticationTokenFilterBean(): AuthenticationTokenFilter {
-//        return AuthenticationTokenFilter().apply {
-//            setAuthenticationManager(super.authenticationManagerBean())
-//        }
     }
 

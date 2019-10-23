@@ -12,7 +12,7 @@ class UserDetailServiceImpl(val studentRepository: StudentRepository) : UserDeta
 
     override fun loadUserByUsername(username: String): UserDetails {
         studentRepository.findStudentByName(username)?.let {
-            print("Authenticatting $it")
+            print("Authenticating $it")
             return StudentDetailsDTO(
                     studentName = it.name,
                     studentPassword = it.password,

@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     @field:Autowired
-    lateinit var userDetailService: UserDetailsService
+    lateinit var userDetailsService: UserDetailsService
 
 
     override fun configure(httpSecurity: HttpSecurity) {
@@ -40,7 +40,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     fun configureAuthentication(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder
-                .userDetailsService<UserDetailsService>(userDetailService)
+                .userDetailsService<UserDetailsService>(userDetailsService)
                 .passwordEncoder(BCryptPasswordEncoder())
     }
 

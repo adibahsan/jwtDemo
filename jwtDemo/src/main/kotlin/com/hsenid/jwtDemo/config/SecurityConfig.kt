@@ -30,6 +30,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .authorizeRequests()
                 .antMatchers("/public").permitAll()
                 .antMatchers("/auth").permitAll()
+                .antMatchers("/body").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilterToken(), UsernamePasswordAuthenticationFilter::class.java)

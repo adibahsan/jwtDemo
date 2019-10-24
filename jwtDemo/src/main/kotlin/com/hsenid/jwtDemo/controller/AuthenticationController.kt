@@ -29,7 +29,7 @@ class AuthenticationController(
         )
         SecurityContextHolder.getContext().authentication = thisAuthenticate
         val token = tokenUtility.generateToken(userDetailsService.loadUserByUsername(studentRequest.name))
-       return "$thisAuthenticate\ntoken : $token"
+       return "$thisAuthenticate\ntoken : $token\n"
     }
 
 }

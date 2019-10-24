@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
+import java.io.PrintWriter
 import java.lang.Exception
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
@@ -28,7 +29,7 @@ class JwtFilter : UsernamePasswordAuthenticationFilter() {
         val httpResponse = res as HttpServletResponse
 
         httpRequest.getHeader(tokenHeader)?.let {
-            print("Header is Found")
+            println("Header is Found")
             try {
                 val studentDetails = tokenUtility.getDetailsFromToken(it)
                 val authentications = UsernamePasswordAuthenticationToken(studentDetails,
@@ -38,16 +39,21 @@ class JwtFilter : UsernamePasswordAuthenticationFilter() {
             } catch(e:Exception)
             {
                 e.printStackTrace()
+               // val out : PrintWriter = res.writer
+
+
                 httpResponse.sendError(HttpServletResponse.SC_EXPECTATION_FAILED,"Token Is Not Found")
+//                httpResponse.contentType = "application/json"
+//                out.println("Awesome")
+//                out.flush()
+               // res.sendRedirect("http://localhost:8181/body")
             }
-
-
 
         }
       //  super.doFilter(req, res, chain)
 
 
 
-        chain?.doFilter(req,res)
+        chain?.doFilter(req,httpResponse)
     }
 }

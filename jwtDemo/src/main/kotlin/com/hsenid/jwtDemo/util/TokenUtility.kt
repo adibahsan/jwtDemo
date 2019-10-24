@@ -12,11 +12,11 @@ import kotlin.collections.HashMap
 
 @Component
 class TokenUtility {
-    val tokenSecret : String ="hsenidMobile"
+    val tokenSecret: String = "hsenidMobile"
     val algorithm = SignatureAlgorithm.HS512
 
     fun generateToken(userDetails: UserDetails): String? {
-    val tokenClaims = HashMap<String,Any>()
+        val tokenClaims = HashMap<String, Any>()
         tokenClaims["enable"] = userDetails.isEnabled
         tokenClaims["created"] = Date()
         tokenClaims["audience"] = "mobile"
@@ -24,30 +24,30 @@ class TokenUtility {
 
         return Jwts.builder()
                 .setSubject(userDetails.username)
-                .setClaims(tokenClaims)
-                .signWith(algorithm,tokenSecret )
+                .addClaims(tokenClaims)
+                .signWith(algorithm, tokenSecret)
                 .compact()
 
     }
 
-    fun getClaimsFromToken (token:String):Claims{
+    fun getClaimsFromToken(token: String): Claims {
         return Jwts.parser()
                 .setSigningKey(this.tokenSecret)
                 .parseClaimsJws(token)
-                .body?: throw RuntimeException("Failed to Retrieve Claims from the Token")
+                .body ?: throw RuntimeException("Failed to Retrieve Claims from the Token")
     }
 
 
-    fun getUsernameFromToken(token: String) : String {
-       return getClaimsFromToken(token).subject ?: throw RuntimeException("Username Not Found")
+    fun getUsernameFromToken(token: String): String {
+        return getClaimsFromToken(token).subject ?: throw RuntimeException("Username Not Found")
     }
 
     fun getExpirationDateFromToken(token: String): Date? {
         return getClaimsFromToken(token).expiration
     }
 
-    fun getDetailsFromToken(token:String) :UserDetails {
-        return  StudentDetailsDTO(
+    fun getDetailsFromToken(token: String): UserDetails {
+        return StudentDetailsDTO(
                 getUsernameFromToken(token),
                 "",
                 getClaimsFromToken(token)["authorities"] as String

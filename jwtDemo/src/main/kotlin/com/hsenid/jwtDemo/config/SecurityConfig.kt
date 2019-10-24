@@ -21,6 +21,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     lateinit var userDetailsService: UserDetailsService
 
 
+
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
                 .csrf().disable()
@@ -30,6 +31,8 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers("/public").permitAll()
                 .antMatchers("/auth").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(authenticationFilterToken(), UsernamePasswordAuthenticationFilter::class.java)
     }
 
     @Bean
@@ -42,6 +45,13 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
         authenticationManagerBuilder
                 .userDetailsService<UserDetailsService>(userDetailsService)
                 .passwordEncoder(BCryptPasswordEncoder())
+    }
+
+    @Bean
+    fun authenticationFilterToken():JwtFilter{
+        return JwtFilter().apply {
+           setAuthenticationManager(super.authenticationManagerBean())
+        }
     }
 
     }
